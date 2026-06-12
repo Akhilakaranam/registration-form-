@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title> Registration Form </title>
+</head>
+<body>
+   <h1> Registration Form </h1>
+   <form>
+      <label for="name">Name: 
+      <input type="text" id="name" name="name" placeholder="lastame" 
+     required> </label><br><br>
+     <label>male<input type="radio" name="gender" value="male"></label>
+     <label>female<input type="radio" name="gender" value="female"></label>
+        <label>other<input type="radio" name="gender" value="other"></label><br><br>
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" min="0"><br><br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="your email"><br><br>
+
+      <label for="password">Password:
+      <input type="password" id="password" name="password" placeholder="your password "pattern=".{5,10}" required title="please enter password of length 5 to 10"></label><br><br>
+      <label for =" ">birthday: </label>
+      <select id="birthday" name="month">
+        <option>month</option>
+        <option>jan</option>
+        <option>feb</option>
+        <option>mar</option>
+        <option>apr</option>
+        <option>may</option>  
+        <option>jun</option>
+        <option>jul</option>        
+        <option>aug</option>
+        <option>sep</option>
+        <option>oct</option>
+        <option>nov</option>
+        <option>dec</option>  
+
+      </select><br>
+      <select id="birthday" name="day">
+        <option>day</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+
+      </select><br>
+      <select id="birthday" name="year">
+        <option>year</option>
+        <option>2000</option>
+        <option>2001</option>
+        <option>2002</option>
+        <option>2003</option>
+        <option>2004</option>
+        <option>2005</option>
+        <option>2006</option>
+        <option>2007</option>
+        <option>2008</option>
+        <option>2009</option>
+        <option>2010</option>
+      </select><br><br>
+      <select id="educational qualifications" name=" educational qualifications">
+        <option> educational qualifications </option>
+        <option> bsc</option>
+        <option> b pharmacy </option>
+        <option> B Tech </option>
+        <option> BE </option>
+        <option> B COM </option>
+      </select><br><br>
+      <select id="branch" name="branch">
+        <option> branch </option>
+        <option> EEE </option>
+        <option> CSE </option>
+        <option> ECE </option>
+        <option> MECH </option>
+        <option> CIVIL </option>
+      </select><br><br>
+      <select id="backlogs" name="backlogs">
+        <option> backlogs </option>
+        <option> 0 </option>
+        <option> 1 </option>
+        <option> 2 </option>
+        <option> 3 </option>
+        <option> 4 </option>
+      </select><br><br>
+      <select id="cgpa" name="cgpa">
+      <option> cgpa </option>
+      <option> 9.0 </option>
+        <option> 8.0 </option>
+        <option> 7.0 </option>
+        <option> 6.0 </option>
+      </select><br><br>
+
+      <label> i agree to the terma and conditions 
+        <input type="check box" name="check">
+      </label><br>
+      <input type="submit" value="submit">
+      <input type="submit" name="submit">
+   </form>
+</body>
+</html>
