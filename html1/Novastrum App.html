@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novastrum | Clothing Store</title>
+  <style>
+:root {
+  --bg: #f7f6f4;
+  --surface: #ffffff;
+  --surface-strong: #f0f0f2;
+  --text: #1a1a1a;
+  --muted: #6f6f7a;
+  --primary: #1d4ed8;
+  --primary-soft: #dbeafe;
+  --accent: #f97316;
+  --border: #e4e4e7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: linear-gradient(180deg, #fefefe 0%, #f7f6f4 100%);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 2rem;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.cart-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+}
+
+.cart-toggle span {
+  background: var(--primary);
+  color: white;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.9rem;
+}
+
+.cart-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 15;
+}
+
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 100%);
+  height: 100vh;
+  background: white;
+  box-shadow: -20px 0 60px rgba(15, 23, 42, 0.18);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+.cart-sidebar.open {
+  transform: translateX(0);
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cart-header h2 {
+  margin: 0;
+}
+
+.cart-close {
+  border: none;
+  background: transparent;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: button;
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding-right: 0.25rem;
+}
+
+.cart-item {
+  border: 1px solid var(--border);
+  border-radius: 1.4rem;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  background: var(--surface);
+}
+
+.cart-item h4 {
+  margin: 0 0 0.4rem;
+}
+
+.cart-item p {
+  margin: 0.3rem 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.cart-item strong {
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.cart-item button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+.cart-summary {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.brand span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.main-nav a:hover {
+  color: var(--text);
+}
+
+.nav-toggle {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 0.2rem;
+  background: var(--text);
+  border-radius: 999px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 2rem 2rem;
+}
+
+.hero-copy {
+  max-width: 600px;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  line-height: 1.05;
+}
+
+.hero-text {
+  margin: 1.5rem 0 2rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 1.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button.primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 16px 40px rgba(29,78,216,0.16);
+}
+
+.button.secondary {
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+.button.tertiary {
+  width: 100%;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.search-bar {
+  margin-top: 2rem;
+}
+
+.search-bar label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.search-bar input {
+  width: calc(100% - 120px);
+  min-width: 0;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px 0 0 999px;
+  outline: none;
+}
+
+.search-bar button {
+  width: 120px;
+  border-radius: 0 999px 999px 0;
+  border: 1px solid var(--border);
+  border-left: none;
+  background: var(--primary);
+  color: white;
+}
+
+.hero-visual {
+  width: 100%;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2rem 2rem 1rem;
+}
+
+.quick-stats div {
+  padding: 1.2rem 1.3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  text-align: center;
+}
+
+.quick-stats strong {
+  display: block;
+  font-size: 1.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.section-header {
+  margin: 3rem 2rem 1.5rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.categories,
+.products,
+.feature-panel,
+.seller-cta {
+  padding: 0 2rem 2rem;
+}
+
+.category-grid,
+.feature-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.category-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.category-card {
+  border-radius: 1.75rem;
+  padding: 1.6rem;
+  background: white;
+  border: 1px solid var(--border);
+}
+
+.category-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.product-filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0 2rem 1.5rem;
+}
+
+.filter-button {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+}
+
+.filter-button.active,
+.filter-button:hover {
+  background: var(--primary-soft);
+  border-color: transparent;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 0 2rem 2rem;
+}
+
+.product-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 1.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.product-card img {
+  min-height: 260px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.product-copy {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex-grow: 1;
+}
+
+.product-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.product-options label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.product-options select {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background: white;
+  outline: none;
+}
+
+.product-copy h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.product-copy p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  flex-grow: 1;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tag {
+  display: inline-flex;
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.feature-panel {
+  margin: 0 2rem 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+  border-radius: 2rem;
+}
+
+.feature-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1.5rem;
+}
+
+.feature-grid article {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.seller-cta {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 0 2rem 3rem;
+}
+
+.seller-cta img {
+  border-radius: 2rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+}
+
+.site-footer {
+  padding: 2.5rem 2rem 1.5rem;
+  background: #111827;
+  color: #d1d5db;
+}
+
+.footer-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.site-footer h3,
+.site-footer h4 {
+  color: white;
+  margin-bottom: 0.9rem;
+}
+
+.site-footer a {
+  display: block;
+  color: #d1d5db;
+  text-decoration: none;
+  margin-bottom: 0.6rem;
+}
+
+.footer-note {
+  margin-top: 2rem;
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 1100px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .category-grid,
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-options {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-cta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    flex-wrap: wrap;
+    padding: 1rem;
+  }
+
+  .main-nav {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+    display: none;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .hero {
+    padding-top: 2rem;
+  }
+
+  .search-bar input {
+    width: 100%;
+    border-radius: 999px;
+    border-right: none;
+  }
+
+  .search-bar button {
+    width: 100%;
+    border-radius: 999px;
+    margin-top: 0.75rem;
+    border-left: 1px solid var(--border);
+  }
+
+  .quick-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <a href="#home">Novastrum</a>
+      <span>Clothing store for modern style</span>
+    </div>
+    <nav class="main-nav" id="main-nav">
+      <a href="#home">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#products">Products</a>
+      <a href="#how-it-works">How it Works</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <button class="cart-toggle" id="cart-toggle" aria-label="Open cart">
+      🛒 <span id="cart-count">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">Your favorite clothing store</p>
+        <h1>Novastrum helps you discover stylish apparel for every season.</h1>
+        <p class="hero-text">Shop curated shirts, dresses, jackets, and accessories with fast delivery and trusted brands.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#products">Shop Now</a>
+          <a class="button secondary" href="#how-it-works">How It Works</a>
+        </div>
+        <div class="search-bar">
+          <label for="search-input">Search clothing</label>
+          <div>
+            <input id="search-input" type="search" placeholder="Search tops, jeans, jackets, accessories">
+            <button id="search-button" type="button">Search</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80" alt="Clothing storefront" loading="lazy">
+      </div>
+    </section>
+
+    <section class="quick-stats">
+      <div>
+        <strong>24K+</strong>
+        <span>Active shoppers</span>
+      </div>
+      <div>
+        <strong>1.2K</strong>
+        <span>Trusted sellers</span>
+      </div>
+      <div>
+        <strong>98%</strong>
+        <span>Customer satisfaction</span>
+      </div>
+    </section>
+
+    <section class="categories" id="categories">
+      <div class="section-header">
+        <p class="eyebrow">Shop by category</p>
+        <h2>Find your next outfit from our clothing collection.</h2>
+      </div>
+      <div class="category-grid">
+        <article class="category-card">
+          <h3>Women's Clothing</h3>
+          <p>Elegant dresses, tops, and activewear for every look.</p>
+        </article>
+        <article class="category-card">
+          <h3>Men's Clothing</h3>
+          <p>Shirts, trousers, jackets, and essentials for modern style.</p>
+        </article>
+        <article class="category-card">
+          <h3>Outerwear</h3>
+          <p>Jackets, coats, and sweatshirts to keep your wardrobe ready.</p>
+        </article>
+        <article class="category-card">
+          <h3>Accessories</h3>
+          <p>Bags, hats, and statement pieces to complete the outfit.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="products" id="products">
+      <div class="section-header">
+        <p class="eyebrow">Featured products</p>
+        <h2>Top picks from verified sellers.</h2>
+      </div>
+      <div class="product-filters">
+        <button class="filter-button active" data-filter="all">All</button>
+        <button class="filter-button" data-filter="women">Women</button>
+        <button class="filter-button" data-filter="men">Men</button>
+        <button class="filter-button" data-filter="outerwear">Outerwear</button>
+        <button class="filter-button" data-filter="accessories">Accessories</button>
+      </div>
+      <div class="product-grid" id="product-grid">
+        <article class="product-card" data-category="women" data-title="Peach embroidered kurta set" data-price="799">
+          <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=700&q=80" alt="Peach embroidered kurta set" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Women</span>
+            <h3>Peach embroidered kurta set</h3>
+            <p>Elegant look for festive gatherings or casual day wear.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select></label>
+              <label>Color<select class="color-select"><option value="Peach">Peach</option><option value="Beige">Beige</option><option value="White">White</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹799</strong>
+              <span>Free delivery</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="men" data-title="Cotton linen shirt" data-price="599">
+          <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80" alt="Cotton linen shirt" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Men</span>
+            <h3>Cotton linen shirt</h3>
+            <p>Comfortable and breathable for everyday style.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select></label>
+              <label>Color<select class="color-select"><option value="White">White</option><option value="Blue">Blue</option><option value="Olive">Olive</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹599</strong>
+              <span>New arrival</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="outerwear" data-title="Oversized denim jacket" data-price="1249">
+          <img src="https://images.unsplash.com/photo-1495121605193-b116b5b9c64b?auto=format&fit=crop&w=700&q=80" alt="Oversized denim jacket" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Outerwear</span>
+            <h3>Oversized denim jacket</h3>
+            <p>Layer up with a relaxed fit denim jacket for cooler days.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select></label>
+              <label>Color<select class="color-select"><option value="Denim">Denim</option><option value="Black">Black</option><option value="Gray">Gray</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹1,249</strong>
+              <span>Best seller</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="accessories" data-title="Leather sling bag" data-price="699">
+          <img src="https://images.unsplash.com/photo-1495121605193-b116b5b9c64b?auto=format&fit=crop&w=700&q=80" alt="Leather sling bag" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Accessories</span>
+            <h3>Leather sling bag</h3>
+            <p>Minimal design with enough room for everyday essentials.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="One Size">One Size</option></select></label>
+              <label>Color<select class="color-select"><option value="Brown">Brown</option><option value="Black">Black</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹699</strong>
+              <span>Editor's pick</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="women" data-title="Floral maxi dress" data-price="899">
+          <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=700&q=80" alt="Floral maxi dress" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Women</span>
+            <h3>Floral maxi dress</h3>
+            <p>Soft fabrics and bright prints for weekend outings.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="S">S</option><option value="M">M</option><option value="L">L</option></select></label>
+              <label>Color<select class="color-select"><option value="Pink">Pink</option><option value="Cream">Cream</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹899</strong>
+              <span>Trending</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="men" data-title="Slim fit chinos" data-price="799">
+          <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80" alt="Slim fit chinos" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Men</span>
+            <h3>Slim fit chinos</h3>
+            <p>Versatile trousers for work or weekend wear.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="30">30</option><option value="32">32</option><option value="34">34</option></select></label>
+              <label>Color<select class="color-select"><option value="Khaki">Khaki</option><option value="Navy">Navy</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹799</strong>
+              <span>Popular choice</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="outerwear" data-title="Quilted bomber jacket" data-price="1,399">
+          <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=700&q=80" alt="Quilted bomber jacket" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Outerwear</span>
+            <h3>Quilted bomber jacket</h3>
+            <p>Lightweight warmth with a streetwear edge.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select></label>
+              <label>Color<select class="color-select"><option value="Black">Black</option><option value="Olive">Olive</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹1,399</strong>
+              <span>New season</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+        <article class="product-card" data-category="accessories" data-title="Minimal hoop earrings" data-price="299">
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80" alt="Minimal hoop earrings" loading="lazy">
+          <div class="product-copy">
+            <span class="tag">Accessories</span>
+            <h3>Minimal hoop earrings</h3>
+            <p>Everyday jewelry with a clean, modern silhouette.</p>
+            <div class="product-options">
+              <label>Size<select class="size-select"><option value="One Size">One Size</option></select></label>
+              <label>Color<select class="color-select"><option value="Gold">Gold</option><option value="Silver">Silver</option></select></label>
+            </div>
+            <div class="product-meta">
+              <strong>₹299</strong>
+              <span>Must have</span>
+            </div>
+            <button class="button tertiary add-to-cart">Add to cart</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="feature-panel" id="how-it-works">
+      <div class="panel-copy">
+        <p class="eyebrow">Why shop with Novastrum</p>
+        <h2>Fast fashion shopping made simple.</h2>
+        <p>Browse curated clothing, secure checkout, and delivery updates so you can refresh your wardrobe with confidence.</p>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <h3>Curated collections</h3>
+          <p>Handpicked styles for men, women, and outerwear trends.</p>
+        </article>
+        <article>
+          <h3>Size guidance</h3>
+          <p>Clear fit information and recommendations for every product.</p>
+        </article>
+        <article>
+          <h3>Easy returns</h3>
+          <p>Flexible exchange and return options for clothing orders.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="seller-cta">
+      <div>
+        <p class="eyebrow">New arrival styles</p>
+        <h2>Refresh your look with the latest clothing drops.</h2>
+        <p>From seasonal essentials to statement pieces, find the perfect outfit in one place.</p>
+        <a class="button primary" href="#products">Browse collection</a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80" alt="Clothing new arrival" loading="lazy">
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-columns">
+      <div>
+        <h3>Novastrum</h3>
+        <p>Marketplace for fashion and lifestyle brands built to help small businesses grow.</p>
+      </div>
+      <div>
+        <h4>Quick links</h4>
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#how-it-works">How it Works</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Email: <a href="mailto:akhilakarnam07@gmail.com">akhilakarnam07@gmail.com</a></p>
+        <p>Phone: +91 90000 12345</p>
+      </div>
+    </div>
+    <p class="footer-note">© 2026 Novastrum. All rights reserved.</p>
+  </footer>
+
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <aside class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <div>
+        <h2>Your cart</h2>
+        <p id="cart-subtitle">0 items selected</p>
+      </div>
+      <button class="cart-close" id="cart-close" aria-label="Close cart">×</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <p class="cart-empty">Your cart is empty. Add a product to get started.</p>
+    </div>
+    <div class="cart-summary">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <strong id="cart-total">₹0</strong>
+      </div>
+      <button id="cart-clear" class="button secondary">Clear cart</button>
+      <button class="button primary">Checkout</button>
+    </div>
+  </aside>
+
+  <script>
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
+const filterButtons = document.querySelectorAll('.filter-button');
+const productCards = document.querySelectorAll('.product-card');
+const navToggle = document.getElementById('nav-toggle');
+const mainNav = document.getElementById('main-nav');
+
+function filterProducts(category, query = '') {
+  const searchTerm = query.trim().toLowerCase();
+  productCards.forEach(card => {
+    const matchesCategory = category === 'all' || card.dataset.category === category;
+    const title = card.dataset.title.toLowerCase();
+    const matchesSearch = !searchTerm || title.includes(searchTerm);
+    card.style.display = matchesCategory && matchesSearch ? 'grid' : 'none';
+  });
+}
+
+searchButton.addEventListener('click', () => {
+  const selected = document.querySelector('.filter-button.active');
+  filterProducts(selected.dataset.filter, searchInput.value);
+});
+
+searchInput.addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    searchButton.click();
+  }
+});
+
+filterButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    filterButtons.forEach(item => item.classList.remove('active'));
+    button.classList.add('active');
+    filterProducts(button.dataset.filter, searchInput.value);
+  });
+});
+
+navToggle.addEventListener('click', () => {
+  mainNav.classList.toggle('open');
+});
+
+const cartToggle = document.getElementById('cart-toggle');
+const cartBackdrop = document.getElementById('cart-backdrop');
+const cartSidebar = document.getElementById('cart-sidebar');
+const cartClose = document.getElementById('cart-close');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalEl = document.getElementById('cart-total');
+const cartSubtitle = document.getElementById('cart-subtitle');
+const cartClear = document.getElementById('cart-clear');
+const cartCount = document.getElementById('cart-count');
+let cart = [];
+
+function formatPrice(amount) {
+  return `₹${amount.toLocaleString('en-IN')}`;
+}
+
+function updateCartUI() {
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  cartCount.textContent = totalItems;
+  cartSubtitle.textContent = `${totalItems} item${totalItems === 1 ? '' : 's'} selected`;
+  cartTotalEl.textContent = formatPrice(totalPrice);
+
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<p class="cart-empty">Your cart is empty. Add a product to get started.</p>';
+    return;
+  }
+
+  cartItemsContainer.innerHTML = cart.map((item, index) => `
+    <article class="cart-item">
+      <div>
+        <h4>${item.title}</h4>
+        <p>${item.size} • ${item.color}</p>
+        <p>Qty: ${item.quantity}</p>
+        <strong>${formatPrice(item.price * item.quantity)}</strong>
+      </div>
+      <button class="cart-remove" data-index="${index}">Remove</button>
+    </article>
+  `).join('');
+
+  cartItemsContainer.querySelectorAll('.cart-remove').forEach(button => {
+    button.addEventListener('click', () => {
+      const index = Number(button.dataset.index);
+      cart.splice(index, 1);
+      updateCartUI();
+    });
+  });
+}
+
+function openCart() {
+  cartSidebar.classList.add('open');
+  cartBackdrop.style.display = 'block';
+}
+
+function closeCart() {
+  cartSidebar.classList.remove('open');
+  cartBackdrop.style.display = 'none';
+}
+
+cartToggle.addEventListener('click', openCart);
+cartClose.addEventListener('click', closeCart);
+cartBackdrop.addEventListener('click', closeCart);
+cartClear.addEventListener('click', () => {
+  cart = [];
+  updateCartUI();
+});
+
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', () => {
+    const card = button.closest('.product-card');
+    const title = card.dataset.title;
+    const price = Number(card.dataset.price.toString().replace(/,/g, ''));
+    const size = card.querySelector('.size-select').value;
+    const color = card.querySelector('.color-select').value;
+    const key = `${title}-${size}-${color}`;
+    const existing = cart.find(item => item.key === key);
+
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({ key, title, price, size, color, quantity: 1 });
+    }
+
+    updateCartUI();
+    openCart();
+  });
+});
+
+filterProducts('all');
+  </script>
+</body>
+</html>
